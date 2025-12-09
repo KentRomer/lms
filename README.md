@@ -10,6 +10,8 @@ If not connected, add your GitHub repo:
 
 COMMIT A CODE
 
+-git pull
+
 -git add .
 
 -git commit -m "Your commit message"
