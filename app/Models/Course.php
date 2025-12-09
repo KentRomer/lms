@@ -23,13 +23,8 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        // REMOVED: 'password' => 'hashed' - This was causing double hashing!
+        'password' => 'hashed',
     ];
-
-    public function courses()
-    {
-        return $this->hasMany(Course::class, 'instructor_id');
-    }
 
     public function isInstructor()
     {
