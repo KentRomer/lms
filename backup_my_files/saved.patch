@@ -1,0 +1,103 @@
+diff --git a/app/Http/Controllers/Controller.php b/app/Http/Controllers/Controller.php
+index 8677cd5..83a2359 100644
+--- a/app/Http/Controllers/Controller.php
++++ b/app/Http/Controllers/Controller.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Http\Controllers;
+ 
++
+ abstract class Controller
+ {
+     //
+diff --git a/app/Http/Controllers/TaskController.php b/app/Http/Controllers/TaskController.php
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/database/factories/UserFactory.php b/database/factories/UserFactory.php
+deleted file mode 100644
+index 584104c..0000000
+--- a/database/factories/UserFactory.php
++++ /dev/null
+@@ -1,44 +0,0 @@
+-<?php
+-
+-namespace Database\Factories;
+-
+-use Illuminate\Database\Eloquent\Factories\Factory;
+-use Illuminate\Support\Facades\Hash;
+-use Illuminate\Support\Str;
+-
+-/**
+- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+- */
+-class UserFactory extends Factory
+-{
+-    /**
+-     * The current password being used by the factory.
+-     */
+-    protected static ?string $password;
+-
+-    /**
+-     * Define the model's default state.
+-     *
+-     * @return array<string, mixed>
+-     */
+-    public function definition(): array
+-    {
+-        return [
+-            'name' => fake()->name(),
+-            'email' => fake()->unique()->safeEmail(),
+-            'email_verified_at' => now(),
+-            'password' => static::$password ??= Hash::make('password'),
+-            'remember_token' => Str::random(10),
+-        ];
+-    }
+-
+-    /**
+-     * Indicate that the model's email address should be unverified.
+-     */
+-    public function unverified(): static
+-    {
+-        return $this->state(fn (array $attributes) => [
+-            'email_verified_at' => null,
+-        ]);
+-    }
+-}
+diff --git a/routes/web.php b/routes/web.php
+index 86a06c5..48deffd 100644
+--- a/routes/web.php
++++ b/routes/web.php
+@@ -1,7 +1,29 @@
+ <?php
+ 
+ use Illuminate\Support\Facades\Route;
++use App\Http\Controllers\CourseController;
++use App\Http\Controllers\LessonController;
++use App\Http\Controllers\InstructorDashboardController;
+ 
+-Route::get('/', function () {
+-    return view('welcome');
+-});
++// Allow direct access to instructor dashboard without auth (for testing)
++Route::get('/', [InstructorDashboardController::class, 'index'])->name('dashboard');
++
++Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
++Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
++
++// Instructor routes (also accessible without auth for testing)
++Route::prefix('instructor')->name('instructor.')->group(function () {
++    Route::get('/dashboard', [InstructorDashboardController::class, 'index'])->name('dashboard');
++    Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
++    Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
++    Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
++    Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
++    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
++    
++    // Lesson management
++    Route::get('/courses/{course}/lessons/create', [LessonController::class, 'create'])->name('lessons.create');
++    Route::post('/courses/{course}/lessons', [LessonController::class, 'store'])->name('lessons.store');
++    Route::get('/courses/{course}/lessons/{lesson}/edit', [LessonController::class, 'edit'])->name('lessons.edit');
++    Route::put('/courses/{course}/lessons/{lesson}', [LessonController::class, 'update'])->name('lessons.update');
++    Route::delete('/courses/{course}/lessons/{lesson}', [LessonController::class, 'destroy'])->name('lessons.destroy');
++});
+\ No newline at end of file

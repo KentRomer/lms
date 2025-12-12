@@ -10,9 +10,10 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('instructor_id')->constrained('users')->onDelete('cascade');
+            // Remove this line: $table->foreignId('user_id')...
             $table->string('title');
-            $table->text('description');
+            $table->string('short_description', 500);
+            $table->text('content');
             $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
