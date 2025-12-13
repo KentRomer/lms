@@ -25,8 +25,10 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:student,instructor',
+        ], [
+            'password.confirmed' => 'Passwords don\'t match.',
         ]);
 
         User::create([
@@ -36,7 +38,7 @@ class AuthController extends Controller
             'role' => $request->role,
         ]);
 
-        // DON'T auto-login - redirect to login page instead
+        // Redirect to login page with success message
         return redirect()->route('login')->with('success', 'Account created successfully! Please login.');
     }
 

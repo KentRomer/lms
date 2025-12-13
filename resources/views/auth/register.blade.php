@@ -10,7 +10,7 @@
     @if ($errors->any())
         <div class="error-message">
             @foreach ($errors->all() as $error)
-                {{ $error }}
+                {{ $error }}<br>
             @endforeach
         </div>
     @endif
@@ -31,6 +31,11 @@
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password_confirmation">Re-enter Password</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
         </div>
 
         <div class="form-group">
