@@ -14,14 +14,13 @@ class CourseController extends Controller
         return view('courses.index', compact('courses'));
     }
 
-    public function show(Course $course)
+     public function show(Course $course)
     {
-        $course->load(['lessons', 'enrollments']);
+        $course->load(['instructor', 'lessons', 'enrollments']);
+        $isEnrolled = Auth::check() && $course->students()->where('user_id', Auth::id())->exists();
+        $isBookmarked = Auth::check() && $course->bookmarkedBy()->where('user_id', Auth::id())->exists();
         
-        $isEnrolled = false;
-        $isBookmarked = false;
-        
-        return view('courses.show', compact('course', 'isEnrolled', 'isBookmarked'));
+        return view('courses.show', compact('course', 'isEnrolled','isBookmarked'));
     }
 
     public function create()
@@ -30,24 +29,28 @@ class CourseController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'short_description' => 'required|string|max:500',
-            'content' => 'required|string',
-            'thumbnail' => 'nullable|image|max:2048',
-        ]);
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'short_description' => 'required|string|max:500',
+        'content' => 'required|string',
+        'thumbnail' => 'nullable|image|max:2048',
+    ]);
 
-        // Handle thumbnail upload BEFORE creating course
-        if($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
-        }
+    // For testing without auth, set user_id to null or a default value
+    $validated['user_id'] = Auth::check() ? Auth::id() : null;
 
-        $course = Course::create($validated);
-
-        return redirect()->route('instructor.dashboard')
-            ->with('success', 'Course created successfully!');
+    // Handle thumbnail upload BEFORE creating course
+    if($request->hasFile('thumbnail')) {
+        $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
     }
+
+    $course = Course::create($validated);
+
+    return redirect()->route('instructor.dashboard')
+        ->with('success', 'Course created successfully!');
+}
+
 
     public function edit(Course $course)
     {
