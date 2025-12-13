@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\InstructorDashboardController;
+use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\EnrollmentController;
 
 // Home route - redirects based on authentication
 Route::get('/', function () {
@@ -31,10 +33,12 @@ Route::get('/courses', [CourseController::class, 'index'])->name('courses.index'
 Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
 
 // Student routes
-Route::middleware(['auth', 'student'])->group(function () {
-    Route::get('/student/dashboard', function () {
-        return view('student.dashboard');
-    })->name('student.dashboard');
+Route::middleware(['auth', 'student'])->prefix('student')->name('student.')->group(function () {
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+    
+    // Enrollment routes
+    Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
+    Route::delete('/courses/{course}/unenroll', [EnrollmentController::class, 'unenroll'])->name('courses.unenroll');
 });
 
 // Instructor routes

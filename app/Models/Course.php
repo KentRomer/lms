@@ -46,4 +46,10 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class, 'bookmarks');
     }
+
+    // Helper method to get instructor name safely
+    public function getInstructorNameAttribute()
+    {
+        return $this->instructor ? $this->instructor->name : 'Unknown Instructor';
+    }
 }

@@ -10,11 +10,11 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::latest()->paginate(12);
+        $courses = Course::with('instructor')->latest()->paginate(12);
         return view('courses.index', compact('courses'));
     }
 
-     public function show(Course $course)
+    public function show(Course $course)
     {
         $course->load(['instructor', 'lessons', 'enrollments']);
         $isEnrolled = Auth::check() && $course->students()->where('user_id', Auth::id())->exists();
@@ -29,36 +29,51 @@ class CourseController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'short_description' => 'required|string|max:500',
-        'content' => 'required|string',
-        'thumbnail' => 'nullable|image|max:2048',
-    ]);
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'short_description' => 'required|string|max:500',
+            'content' => 'required|string',
+            'thumbnail' => 'nullable|image|max:2048',
+        ]);
 
-    // For testing without auth, set user_id to null or a default value
-    $validated['user_id'] = Auth::check() ? Auth::id() : null;
+        // FIXED: Always require authentication for course creation
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to create a course.');
+        }
 
-    // Handle thumbnail upload BEFORE creating course
-    if($request->hasFile('thumbnail')) {
-        $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        $validated['user_id'] = Auth::id();
+
+        // Handle thumbnail upload BEFORE creating course
+        if($request->hasFile('thumbnail')) {
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
+        $course = Course::create($validated);
+
+        return redirect()->route('instructor.dashboard')
+            ->with('success', 'Course created successfully!');
     }
-
-    $course = Course::create($validated);
-
-    return redirect()->route('instructor.dashboard')
-        ->with('success', 'Course created successfully!');
-}
-
 
     public function edit(Course $course)
     {
+        // Check if the authenticated user is the course owner
+        if ($course->user_id !== Auth::id()) {
+            return redirect()->route('instructor.dashboard')
+                ->with('error', 'You are not authorized to edit this course.');
+        }
+
         return view('instructor.courses.edit', compact('course'));
     }
 
     public function update(Request $request, Course $course)
     {
+        // Check if the authenticated user is the course owner
+        if ($course->user_id !== Auth::id()) {
+            return redirect()->route('instructor.dashboard')
+                ->with('error', 'You are not authorized to update this course.');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'short_description' => 'required|string|max:500',
@@ -83,6 +98,12 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
+        // Check if the authenticated user is the course owner
+        if ($course->user_id !== Auth::id()) {
+            return redirect()->route('instructor.dashboard')
+                ->with('error', 'You are not authorized to delete this course.');
+        }
+
         if ($course->thumbnail) {
             Storage::disk('public')->delete($course->thumbnail);
         }
