@@ -21,35 +21,24 @@ class AuthController extends Controller
      * Handle Registration
      */
     public function register(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8',
-        'role' => 'required|in:student,instructor',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'role' => 'required|in:student,instructor',
+        ]);
 
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => $request->role,
-    ]);
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
 
-    Auth::login($user);
-    $request->session()->regenerate(); // Add this line
-
-    // Add success flash message
-    session()->flash('success', 'Account created successfully!');
-
-    // Redirect to the correct dashboard based on role
-    if ($user->role === 'instructor') {
-        return redirect()->route('instructor.dashboard');
-    } else {
-        return redirect()->route('student.dashboard');
+        // DON'T auto-login - redirect to login page instead
+        return redirect()->route('login')->with('success', 'Account created successfully! Please login.');
     }
-}
-
 
     /**
      * Show Login Page

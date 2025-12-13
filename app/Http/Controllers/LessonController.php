@@ -11,7 +11,7 @@ class LessonController extends Controller
     public function create(Course $course)
     {
         if ($course->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
+            return redirect()->back()->with('error', 'Unauthorized Action: You are not the instructor who made this course.');
         }
 
         return view('instructor.lessons.create', compact('course'));
@@ -20,7 +20,7 @@ class LessonController extends Controller
     public function store(Request $request, Course $course)
     {
         if ($course->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
+            return redirect()->back()->with('error', 'Unauthorized Action: You are not the instructor who made this course.');
         }
 
         $validated = $request->validate([
@@ -40,7 +40,7 @@ class LessonController extends Controller
     public function edit(Course $course, Lesson $lesson)
     {
         if ($course->user_id !== Auth::id() || $lesson->course_id !== $course->id) {
-            abort(403, 'Unauthorized action.');
+            return redirect()->back()->with('error', 'Unauthorized Action: You are not the instructor who made this course.');
         }
 
         return view('instructor.lessons.edit', compact('course', 'lesson'));
@@ -49,7 +49,7 @@ class LessonController extends Controller
     public function update(Request $request, Course $course, Lesson $lesson)
     {
         if ($course->user_id !== Auth::id() || $lesson->course_id !== $course->id) {
-            abort(403, 'Unauthorized action.');
+            return redirect()->back()->with('error', 'Unauthorized Action: You are not the instructor who made this course.');
         }
 
         $validated = $request->validate([
@@ -66,7 +66,7 @@ class LessonController extends Controller
     public function destroy(Course $course, Lesson $lesson)
     {
         if ($course->user_id !== Auth::id() || $lesson->course_id !== $course->id) {
-            abort(403, 'Unauthorized action.');
+            return redirect()->back()->with('error', 'Unauthorized Action: You are not the instructor who made this course.');
         }
 
         $lesson->delete();

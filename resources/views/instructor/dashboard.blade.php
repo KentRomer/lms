@@ -40,6 +40,13 @@
             </div>
         @endif
 
+        <!-- Error Message -->
+        @if(session('error'))
+            <div class="bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-lg mb-6">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <!-- Page Header -->
         <div class="mb-8">
             <div class="flex justify-between items-center mb-2">

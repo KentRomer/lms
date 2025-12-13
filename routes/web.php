@@ -6,7 +6,6 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\InstructorDashboardController;
 use App\Http\Controllers\StudentDashboardController;
-use App\Http\Controllers\EnrollmentController;
 
 // Home route - redirects based on authentication
 Route::get('/', function () {
@@ -33,15 +32,18 @@ Route::get('/courses', [CourseController::class, 'index'])->name('courses.index'
 Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
 
 // Student routes
-Route::middleware(['auth', 'student'])->prefix('student')->name('student.')->group(function () {
-    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+Route::middleware(['auth', 'student'])->group(function () {
+    Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
     
     // Enrollment routes
-    Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
-    Route::delete('/courses/{course}/unenroll', [EnrollmentController::class, 'unenroll'])->name('courses.unenroll');
+    Route::post('/student/courses/{course}/enroll', [StudentDashboardController::class, 'enroll'])
+        ->name('student.courses.enroll');
+    
+    Route::delete('/student/courses/{course}/unenroll', [StudentDashboardController::class, 'unenroll'])
+        ->name('student.courses.unenroll');
 });
 
-// Instructor routes
+// Instructor routes - WITH AUTH
 Route::middleware(['auth', 'instructor'])->prefix('instructor')->name('instructor.')->group(function () {
     Route::get('/dashboard', [InstructorDashboardController::class, 'index'])->name('dashboard');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
