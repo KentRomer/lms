@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Create Course - LearnHub</title>
+    <title>Create Course - Simple LMS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -31,7 +31,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-primary">LearnHub</a>
+                    <a href="/" class="text-2xl font-bold text-primary">Simple LMS</a>
                     <div class="ml-10 flex space-x-4">
                         <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Courses</a>
                     </div>
@@ -53,7 +53,7 @@
                 <h1 class="text-4xl font-bold mb-8">Create New Course</h1>
 
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-                    <form action="{{ route('instructor.courses.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('instructor.courses.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return handleSubmit(event)">
                         @csrf
 
                         <div class="mb-6">
@@ -94,7 +94,7 @@
                         </div>
 
                         <div class="flex space-x-4">
-                            <button type="submit" class="bg-primary hover:bg-blue-600 text-white px-6 py-2 rounded-md font-medium">
+                            <button type="submit" id="submitBtn" class="bg-primary hover:bg-blue-600 text-white px-6 py-2 rounded-md font-medium disabled:bg-gray-400 disabled:cursor-not-allowed">
                                 Create Course
                             </button>
                             <a href="{{ route('instructor.dashboard') }}" 
@@ -111,7 +111,7 @@
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <p class="text-center text-gray-500 dark:text-gray-400 text-sm">
-                &copy; {{ date('Y') }} LearnHub. All rights reserved.
+                &copy; {{ date('Y') }} Simple LMS. All rights reserved.
             </p>
         </div>
     </footer>
@@ -121,6 +121,23 @@
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
             localStorage.setItem('dark_mode', isDark);
+        }
+
+        // Prevent duplicate form submissions
+        function handleSubmit(event) {
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Check if already submitted
+            if (submitBtn.disabled) {
+                event.preventDefault();
+                return false;
+            }
+            
+            // Disable button and change text
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating...';
+            
+            return true;
         }
     </script>
 </body>
