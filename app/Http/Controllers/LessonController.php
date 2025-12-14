@@ -14,7 +14,7 @@ class LessonController extends Controller
             return redirect()->back()->with('error', 'Unauthorized Action: You are not the instructor who made this course.');
         }
 
-        return view('instructor.lessons.create', compact('course'));
+        return view('instructor.Lessons.create', compact('course'));
     }
 
     public function store(Request $request, Course $course)
@@ -43,7 +43,7 @@ class LessonController extends Controller
             return redirect()->back()->with('error', 'Unauthorized Action: You are not the instructor who made this course.');
         }
 
-        return view('instructor.lessons.edit', compact('course', 'lesson'));
+        return view('instructor.Lessons.edit', compact('course', 'lesson'));
     }
 
     public function update(Request $request, Course $course, Lesson $lesson)
