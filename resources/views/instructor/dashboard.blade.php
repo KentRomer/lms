@@ -111,29 +111,29 @@
                             </div>
 
                             <div class="flex flex-wrap gap-2">
-                                <a href="{{ route('courses.show', $course->id) }}" 
-                                   class="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">
-                                    View
-                                </a>
-                                <a href="{{ route('instructor.courses.edit', $course->id) }}" 
-                                   class="flex-1 text-center bg-blue-50 hover:bg-blue-100 text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition">
-                                    Edit
-                                </a>
-                                <a href="{{ route('instructor.lessons.create', $course->id) }}" 
-                                   class="flex-1 text-center bg-green-50 hover:bg-green-100 text-green-600 px-4 py-2 rounded-lg text-sm font-medium transition">
-                                    + Lesson
-                                </a>
-                                <form action="{{ route('instructor.courses.destroy', $course->id) }}" 
-                                      method="POST" 
-                                      class="flex-1"
-                                      onsubmit="return confirm('Delete this course and all its lessons?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" 
-                                            class="w-full bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-lg text-sm font-medium transition">
-                                        Delete
-                                    </button>
-                                </form>
+                               <a href="{{ route('courses.show', $course) }}" 
+   class="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">
+    View
+</a>
+<a href="{{ route('instructor.courses.edit', $course) }}" 
+   class="flex-1 text-center bg-blue-50 hover:bg-blue-100 text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition">
+    Edit
+</a>
+<a href="{{ route('instructor.lessons.create', $course) }}" 
+   class="flex-1 text-center bg-green-50 hover:bg-green-100 text-green-600 px-4 py-2 rounded-lg text-sm font-medium transition">
+    + Lesson
+</a>
+<form action="{{ route('instructor.courses.destroy', $course) }}" 
+      method="POST" 
+      class="flex-1"
+      onsubmit="return confirm('Delete this course and all its lessons?')">
+    @csrf
+    @method('DELETE')
+    <button type="submit" 
+            class="w-full bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-lg text-sm font-medium transition">
+        Delete
+    </button>
+</form>
                             </div>
                         </div>
                     </div>
