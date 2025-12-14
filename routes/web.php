@@ -97,3 +97,15 @@ Route::get('/test-db-connection', function () {
         ], 500);
     }
 });
+
+Route::get('/test-create-view', function () {
+    try {
+        return view('instructor.courses.create');
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ], 500);
+    }
+});
