@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $course->title }} - Simple LMS</title>
+    <title>{{ $course->title }} - LearnHub</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -13,7 +13,7 @@
         <div class="max-w-7xl mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-8">
-                    <h1 class="text-2xl font-bold text-gray-800">Simple LMS</h1>
+                    <h1 class="text-2xl font-bold text-gray-800">LearnHub</h1>
                     <nav class="flex gap-6 text-sm">
                         @auth
                             @if(auth()->user()->isInstructor())
@@ -223,7 +223,7 @@
     <footer class="bg-white border-t mt-16">
         <div class="max-w-7xl mx-auto px-6 py-6">
             <p class="text-center text-gray-500 text-sm">
-                © {{ date('Y') }} Simple LMS. All rights reserved.
+                © {{ date('Y') }} LearnHub. All rights reserved.
             </p>
         </div>
     </footer>
