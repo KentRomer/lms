@@ -15,9 +15,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'instructor' => \App\Http\Middleware\InstructorMiddleware::class,
             'student' => \App\Http\Middleware\StudentMiddleware::class,
         ]);
-         $middleware->web(append: [
-        \App\Http\Middleware\ForceHttps::class,
-    ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
