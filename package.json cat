@@ -1,0 +1,14 @@
+
+   {
+     "private":true,
+      "type":"module"
+       "scripts":{
+             "dev":"echo 'No build needed'",
+              "build":"echo'No build needed'",
+},
+         "devDependencies":{
+              "axios": "^1.7.4",
+              "laravel-vite-plugging":"^1.0",
+              "vite":"^7.2.6"
+}
+}
