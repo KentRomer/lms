@@ -11,17 +11,17 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::with('instructor')->latest()->paginate(12);
-        return view('courses.index', compact('courses'));
+        return view('Courses.index', compact('courses'));
     }
 
     public function show(Course $course)
-    {
-        $course->load(['instructor', 'lessons', 'enrollments']);
-        $isEnrolled = Auth::check() && $course->students()->where('user_id', Auth::id())->exists();
-        $isBookmarked = Auth::check() && $course->bookmarkedBy()->where('user_id', Auth::id())->exists();
-        
-        return view('courses.show', compact('course', 'isEnrolled','isBookmarked'));
-    }
+{
+    $course->load(['instructor', 'lessons', 'enrollments']);
+    $isEnrolled = Auth::check() && $course->students()->where('user_id', Auth::id())->exists();
+    $isBookmarked = Auth::check() && $course->bookmarkedBy()->where('user_id', Auth::id())->exists();
+    
+    return view('Courses.show', compact('course', 'isEnrolled','isBookmarked')); // Changed from 'courses.show'
+}
 
     public function create()
     {
