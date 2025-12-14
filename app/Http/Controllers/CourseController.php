@@ -25,7 +25,7 @@ class CourseController extends Controller
 
     public function create()
     {
-        return view('instructor.courses.create');
+        return view('instructor.Courses.create');
     }
 
     public function store(Request $request)
@@ -63,7 +63,7 @@ class CourseController extends Controller
                 ->with('error', 'You are not authorized to edit this course.');
         }
 
-        return view('instructor.courses.edit', compact('course'));
+        return view('instructor.Courses.edit', compact('course'));
     }
 
     public function update(Request $request, Course $course)
