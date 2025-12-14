@@ -51,7 +51,7 @@
         <div class="mb-8">
             <div class="flex justify-between items-center mb-2">
                 <h2 class="text-3xl font-bold text-gray-900">My Courses</h2>
-                <a href="{{ route('instructor.Courses.create') }}" 
+                <a href="{{ route('instructor.courses.create') }}" 
                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition">
                     + Create Course
                 </a>
@@ -66,7 +66,7 @@
                     <div class="text-6xl mb-4">📚</div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">No courses yet</h3>
                     <p class="text-gray-600 mb-6">Start by creating your first course</p>
-                    <a href="{{ route('instructor.Courses.create') }}" 
+                    <a href="{{ route('instructor.courses.create') }}" 
                        class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition">
                         Create Your First Course
                     </a>
@@ -115,7 +115,7 @@
                                    class="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">
                                     View
                                 </a>
-                                <a href="{{ route('instructor.Courses.edit', $course->id) }}" 
+                                <a href="{{ route('instructor.courses.edit', $course->id) }}" 
                                    class="flex-1 text-center bg-blue-50 hover:bg-blue-100 text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition">
                                     Edit
                                 </a>
